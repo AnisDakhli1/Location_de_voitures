@@ -60,16 +60,19 @@ public class SingUp extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel7.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
-        jLabel7.setText("BirthDate");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 400, 215, -1));
-        jPanel1.add(Password, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 470, 350, 38));
+        jLabel7.setText("BirthDate(YYYY-MM-DD)");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 400, 220, -1));
 
+        Password.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel1.add(Password, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 470, 350, 38));
+
+        ConfirmPassword.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         ConfirmPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ConfirmPasswordActionPerformed(evt);
             }
         });
-        jPanel1.add(ConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 540, 350, 39));
+        jPanel1.add(ConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 540, 350, 39));
 
         jLabel5.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
         jLabel5.setText("Password");
@@ -87,6 +90,8 @@ public class SingUp extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 640, 129, 42));
+
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 590, 583, 40));
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -98,44 +103,51 @@ public class SingUp extends javax.swing.JFrame {
         });
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 640, 129, 41));
 
+        FirstName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         FirstName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 FirstNameActionPerformed(evt);
             }
         });
-        jPanel1.add(FirstName, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 100, 350, 40));
+        jPanel1.add(FirstName, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 100, 350, 40));
 
+        LastName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         LastName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 LastNameActionPerformed(evt);
             }
         });
-        jPanel1.add(LastName, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 160, 350, 40));
+        jPanel1.add(LastName, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 160, 350, 40));
 
         jLabel1.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
-        jLabel1.setText("FirstName");
+        jLabel1.setText("First Name");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 100, 132, -1));
 
         jLabel2.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
-        jLabel2.setText("LastName");
+        jLabel2.setText("Last Name");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 170, 101, -1));
-        jPanel1.add(IdCardNumbe, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 230, 350, 40));
+
+        IdCardNumbe.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel1.add(IdCardNumbe, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 230, 350, 40));
 
         jLabel3.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
-        jLabel3.setText("IdCardNumbe");
+        jLabel3.setText("Id Card Numbe");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 240, 215, -1));
 
+        Email.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         Email.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EmailActionPerformed(evt);
             }
         });
-        jPanel1.add(Email, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 310, 350, 40));
+        jPanel1.add(Email, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 310, 350, 40));
 
         jLabel4.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
         jLabel4.setText("Email");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 320, 75, -1));
-        jPanel1.add(BirthDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 390, 350, 40));
+
+        BirthDate.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel1.add(BirthDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 390, 350, 40));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)));
         jPanel2.setToolTipText("SingUp");
