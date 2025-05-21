@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2025 at 06:57 AM
+-- Generation Time: May 21, 2025 at 05:08 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,8 +43,15 @@ CREATE TABLE `cars` (
 --
 
 INSERT INTO `cars` (`id`, `make`, `model`, `year`, `license_plate`, `color`, `daily_rate`, `available`) VALUES
-(1, 'bmw', 'X6', 2025, '260TU9999', 'black', 500.00, 1),
-(2, 'tesla', 'Model pled', 2015, '258TU1011', 'white', 300.00, 1);
+(2, 'tesla', 'Model pled', 2015, '258TU1011', 'white', 300.00, 1),
+(3, 'BMW', 'M4Cs', 2019, '250TU1234', 'GREN', 1400.00, 0),
+(7, 'volkswagen', 'passat', 2019, '168TU990', 'pink', 90.00, 1),
+(8, 'toyota', 'HILUX', 2020, '200TU569', 'black', 500.00, 1),
+(9, 'KIA', 'RIO', 2016, '170TU896', 'bleu', 250.00, 1),
+(10, 'kia', 'sportege', 2024, '220TU9500', 'rouge', 1000.00, 1),
+(11, 'Lamborghini', 'Urus', 2025, '260TU8907', 'yellow', 55000.00, 1),
+(12, 'Renault', 'R4', 1990, '35TU50', 'blanche', 200.00, 1),
+(14, 'kia', 'sportege', 2022, '154TU500', 'red', 600.00, 1);
 
 -- --------------------------------------------------------
 
@@ -67,11 +74,14 @@ CREATE TABLE `rentals` (
 --
 
 INSERT INTO `rentals` (`id`, `user_id`, `car_id`, `start_date`, `end_date`, `total_cost`, `returned`) VALUES
-(1, 3, 1, '2025-05-16', '2025-05-19', 1500.00, 1),
-(2, 3, 1, '2025-04-16', '2025-05-17', 16000.00, 1),
-(3, 3, 1, '2025-04-16', '2025-05-17', 16000.00, 1),
 (4, 3, 2, '2025-05-16', '2025-06-17', 9600.00, 1),
-(5, 4, 2, '2025-05-16', '2025-08-17', 27900.00, 1);
+(5, 4, 2, '2025-05-16', '2025-08-17', 27900.00, 1),
+(6, 3, 3, '2025-05-16', '2025-06-03', 25200.00, 1),
+(9, 1, 7, '2025-04-19', '2025-05-16', 2500.00, 1),
+(10, 1, 3, '2025-05-04', '2025-05-07', 5600.00, 0),
+(11, 1, 12, '2025-05-16', '2025-05-19', 1500.00, 1),
+(12, 1, 11, '2025-05-16', '2025-05-19', 165000.00, 1),
+(13, 1, 9, '2025-05-10', '2025-05-14', 1250.00, 1);
 
 -- --------------------------------------------------------
 
@@ -95,9 +105,15 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `id_card_number`, `email`, `birth_date`, `password`, `is_admin`) VALUES
-(1, 'anis', 'dakhli', '12345678', 'anis@gamil.com', '2004-04-17', 'anis123456', 1),
+(1, 'anis', 'dakhli', '12345678', 'anis@gamil.com', '2004-04-17', 'anis123456', 0),
 (3, 'adbou', 'souayeh', '12345687', 'abdo@gmail.com', '2025-05-16', 'azerty123', 0),
-(4, 'ali', 'mdd', '98745632', 'eeeeeeeee@gmail.com', '2025-05-16', '12345678', 0);
+(4, 'ali', 'mdd', '98745632', 'eeeeeeeee@gmail.com', '2025-05-16', '12345678', 0),
+(5, 'Yessine', 'Yahyaoui', '12384929', 'yesssineyahoui@gmail.com', '2025-05-16', 'yessine123456', 0),
+(7, 'admin', 'admin', '99999999', 'admin@gmail.com', '2000-08-08', 'adminadmin', 1),
+(8, 'ranime', 'saadelaoui', '56565656', 'ranim@gmail.com', '2025-05-16', 'ranimeranime', 0),
+(9, 'Wiem', 'wiem', '12312312', 'wiem@gmail.xom', '2025-05-16', 'wiemwiem', 0),
+(10, 'youssef', 'hafsouni', '12345655', 'youssef@gmail.com', '2025-05-16', '00000000', 0),
+(11, 'yassine', 'yahayoui', '30033303', 'yassine@gmail.com', '2004-05-08', '123456789', 0);
 
 --
 -- Indexes for dumped tables
@@ -134,19 +150,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cars`
 --
 ALTER TABLE `cars`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `rentals`
 --
 ALTER TABLE `rentals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables
