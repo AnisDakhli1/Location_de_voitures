@@ -21,12 +21,20 @@ public class AdminPanel extends JFrame {
 
     public AdminPanel() {
         setTitle("Car Rental System - Admin Panel");
-        setSize(900, 600);
+        setSize(1000, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
+        // Set default font sizes
+        UIManager.put("Label.font", new Font("Arial", Font.PLAIN, 18));
+        UIManager.put("Button.font", new Font("Arial", Font.PLAIN, 18));
+        UIManager.put("TabbedPane.font", new Font("Arial", Font.PLAIN, 18));
+        UIManager.put("Table.font", new Font("Arial", Font.PLAIN, 18));
+        UIManager.put("TableHeader.font", new Font("Arial", Font.BOLD, 18));
+        
         // Create tabbed pane
         tabbedPane = new JTabbedPane();
+        tabbedPane.setFont(new Font("Arial", Font.PLAIN, 18));
         
         // Add tabs
         tabbedPane.addTab("Dashboard", new DashboardPanel());
@@ -37,11 +45,11 @@ public class AdminPanel extends JFrame {
         // Add logout button to the bottom
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton logoutButton = new JButton("Logout");
+        logoutButton.setFont(new Font("Arial", Font.PLAIN, 18));
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                // Open login window (you'll need to implement this)
                 new LogIn().setVisible(true);
             }
         });
@@ -51,10 +59,6 @@ public class AdminPanel extends JFrame {
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
         getContentPane().add(bottomPanel, BorderLayout.SOUTH);
-        initComponents();
-    }
-    private void initComponents() {
-        // Initialize UI components
     }
 
     public static void main(String[] args) {

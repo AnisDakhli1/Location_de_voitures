@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Comparator;
 import javax.swing.table.DefaultTableModel;
 
 public class DashboardPanel extends JPanel {
@@ -34,11 +33,12 @@ public class DashboardPanel extends JPanel {
         userDB = new UserDataBaseConnection();
         rentalDB = new LocationDataBaseConnection();
         
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(10, 10));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Create welcome label
         JLabel welcomeLabel = new JLabel("Admin Dashboard", SwingConstants.CENTER);
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 28));
         
         // Create main panel with statistics and top lists
         JPanel mainPanel = new JPanel(new GridLayout(2, 1, 10, 10));
@@ -53,10 +53,10 @@ public class DashboardPanel extends JPanel {
         double totalRevenue = getTotalRevenue();
         
         // Add statistic cards
-            statsPanel.add(createStatCard("Total Users", String.valueOf(totalUsers)));
-            statsPanel.add(createStatCard("Available Cars", String.valueOf(availableCars)));
-            statsPanel.add(createStatCard("Active Rentals", String.valueOf(activeRentals)));
-            statsPanel.add(createStatCard("Total Revenue", String.format("$%.2f", totalRevenue)));
+        statsPanel.add(createStatCard("Total Users", String.valueOf(totalUsers)));
+        statsPanel.add(createStatCard("Available Cars", String.valueOf(availableCars)));
+        statsPanel.add(createStatCard("Active Rentals", String.valueOf(activeRentals)));
+        statsPanel.add(createStatCard("Total Revenue", String.format("$%.2f", totalRevenue)));
         
         // Create top lists panel
         JPanel topListsPanel = new JPanel(new GridLayout(1, 2, 10, 10));
@@ -107,159 +107,130 @@ public class DashboardPanel extends JPanel {
             return 0.0;
         }
     }
-    private Map<Voiture, Integer> calculateCarRentals() {
-        Map<Voiture, Integer> carRentals = new HashMap<>();
+    
+    private Map<User, Double> calculateUserSpending() {
+        Map<User, Double> userSpending = new HashMap<>();
         try {
             List<Location> rentals = rentalDB.getAllRentals();
-            List<Voiture> cars = carDB.getAllCars();
             
-            // Initialize all cars with 0 rentals
-            for (Voiture car : cars) {
-                if (car != null) {
-                    carRentals.put(car, 0);
-                }
-            }
-            
-            // Count rentals for each car
             for (Location rental : rentals) {
                 if (rental != null) {
-                    Voiture car = carDB.getCarById(rental.getCarId());
-                    if (car != null) {
-                        carRentals.merge(car, 1, Integer::sum);
+                    User user = userDB.getUserById(rental.getUserId());
+                    if (user != null) {
+                        double currentTotal = userSpending.getOrDefault(user, 0.0);
+                        userSpending.put(user, currentTotal + rental.getTotalCost());
                     }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return carRentals;
+        return userSpending;
     }
     
-private Map<User, Double> calculateUserSpending() {
-    Map<User, Double> userSpending = new HashMap<>();
-    try {
-        List<Location> rentals = rentalDB.getAllRentals();
+    private JPanel createTopUsersPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder("Top Spenders"));
         
-        // Calculate total spending for each user
-        for (Location rental : rentals) {
-            if (rental != null) {
-                User user = userDB.getUserById(rental.getUserId());
-                if (user != null) {
-                    // Sum up all rentals for this user
-                    double currentTotal = userSpending.getOrDefault(user, 0.0);
-                    userSpending.put(user, currentTotal + rental.getTotalCost());
+        try {
+            Map<User, Double> userSpending = calculateUserSpending();
+            List<Map.Entry<User, Double>> sortedUsers = new ArrayList<>(userSpending.entrySet());
+            sortedUsers.sort((a, b) -> b.getValue().compareTo(a.getValue()));
+
+            DefaultTableModel model = new DefaultTableModel(new String[]{"Rank", "User", "Total Spent"}, 0);
+
+            int rank = 1;
+            for (Map.Entry<User, Double> entry : sortedUsers) {
+                User user = entry.getKey();
+                if (user != null && entry.getValue() > 0) {
+                    model.addRow(new Object[]{
+                        rank++,
+                        user.getFirstName() + " " + user.getLastName(),
+                        String.format("$%.2f", entry.getValue())
+                    });
                 }
             }
+
+            JTable table = new JTable(model);
+            table.setFont(new Font("Arial", Font.PLAIN, 18));
+            table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 18));
+            table.setRowHeight(30);
+            panel.add(new JScrollPane(table), BorderLayout.CENTER);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            panel.add(new JLabel("Error loading data", SwingConstants.CENTER));
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return panel;
     }
-    return userSpending;
-}
-
-private JPanel createTopUsersPanel() {
-    JPanel panel = new JPanel(new BorderLayout());
-    panel.setBorder(BorderFactory.createTitledBorder("Top Spenders"));
-
-    try {
-        Map<User, Double> userSpending = calculateUserSpending();
-        
-        // Convert to list and sort by total spent (descending)
-        List<Map.Entry<User, Double>> sortedUsers = new ArrayList<>(userSpending.entrySet());
-        sortedUsers.sort((a, b) -> b.getValue().compareTo(a.getValue()));
-
-        // Create table
-        DefaultTableModel model = new DefaultTableModel(
-            new String[]{"Rank", "User", "Total Spent"}, 0);
-
-        int rank = 1;
-        for (Map.Entry<User, Double> entry : sortedUsers) {
-            User user = entry.getKey();
-            if (user != null && entry.getValue() > 0) {
-                model.addRow(new Object[]{
-                    rank++,
-                    user.getFirstName() + " " + user.getLastName(),
-                    String.format("$%.2f", entry.getValue())
-                });
-            }
-        }
-
-        JTable table = new JTable(model);
-        panel.add(new JScrollPane(table), BorderLayout.CENTER);
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        panel.add(new JLabel("Error loading data", SwingConstants.CENTER));
-    }
-    return panel;
-}
-private Map<Voiture, Double> calculateCarRevenue() {
-    Map<Voiture, Double> carRevenue = new HashMap<>();
-    try {
-        List<Location> rentals = rentalDB.getAllRentals();
-        
-        // Calculate total revenue for each car
-        for (Location rental : rentals) {
-            if (rental != null) {
-                Voiture car = carDB.getCarById(rental.getCarId());
-                if (car != null) {
-                    // Sum up all rentals for this car
-                    double currentTotal = carRevenue.getOrDefault(car, 0.0);
-                    carRevenue.put(car, currentTotal + rental.getTotalCost());
+    
+    private Map<Voiture, Double> calculateCarRevenue() {
+        Map<Voiture, Double> carRevenue = new HashMap<>();
+        try {
+            List<Location> rentals = rentalDB.getAllRentals();
+            
+            for (Location rental : rentals) {
+                if (rental != null) {
+                    Voiture car = carDB.getCarById(rental.getCarId());
+                    if (car != null) {
+                        double currentTotal = carRevenue.getOrDefault(car, 0.0);
+                        carRevenue.put(car, currentTotal + rental.getTotalCost());
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return carRevenue;
     }
-    return carRevenue;
-}
-
-private JPanel createTopCarsPanel() {
-    JPanel panel = new JPanel(new BorderLayout());
-    panel.setBorder(BorderFactory.createTitledBorder("Top Revenue Cars"));
-
-    try {
-        Map<Voiture, Double> carRevenue = calculateCarRevenue();
+    
+    private JPanel createTopCarsPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder("Top Revenue Cars"));
         
-        // Convert to list and sort by revenue (descending)
-        List<Map.Entry<Voiture, Double>> sortedCars = new ArrayList<>(carRevenue.entrySet());
-        sortedCars.sort((a, b) -> b.getValue().compareTo(a.getValue()));
+        try {
+            Map<Voiture, Double> carRevenue = calculateCarRevenue();
+            List<Map.Entry<Voiture, Double>> sortedCars = new ArrayList<>(carRevenue.entrySet());
+            sortedCars.sort((a, b) -> b.getValue().compareTo(a.getValue()));
 
-        // Create table
-        DefaultTableModel model = new DefaultTableModel(
-            new String[]{"Car", "Total Revenue"}, 0);
+            DefaultTableModel model = new DefaultTableModel(new String[]{"Car", "Total Revenue"}, 0);
 
-        for (Map.Entry<Voiture, Double> entry : sortedCars) {
-            Voiture car = entry.getKey();
-            if (car != null && entry.getValue() > 0) {
-                model.addRow(new Object[]{
-                    car.getMake() + " " + car.getModel(),
-                    String.format("$%.2f", entry.getValue())
-                });
+            for (Map.Entry<Voiture, Double> entry : sortedCars) {
+                Voiture car = entry.getKey();
+                if (car != null && entry.getValue() > 0) {
+                    model.addRow(new Object[]{
+                        car.getMake() + " " + car.getModel(),
+                        String.format("$%.2f", entry.getValue())
+                    });
+                }
             }
+
+            JTable table = new JTable(model);
+            table.setFont(new Font("Arial", Font.PLAIN, 18));
+            table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 18));
+            table.setRowHeight(30);
+            panel.add(new JScrollPane(table), BorderLayout.CENTER);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            panel.add(new JLabel("Error loading data", SwingConstants.CENTER));
         }
-
-        JTable table = new JTable(model);
-        panel.add(new JScrollPane(table), BorderLayout.CENTER);
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        panel.add(new JLabel("Error loading data", SwingConstants.CENTER));
+        return panel;
     }
-    return panel;
-}
     
     private JPanel createStatCard(String title, String value) {
         JPanel card = new JPanel(new BorderLayout());
-        card.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        card.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY),
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
         card.setBackground(Color.WHITE);
         
         JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        titleLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         
         JLabel valueLabel = new JLabel(value, SwingConstants.CENTER);
-        valueLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        valueLabel.setFont(new Font("Arial", Font.BOLD, 22));
         valueLabel.setForeground(new Color(0, 100, 200));
         
         card.add(titleLabel, BorderLayout.NORTH);
